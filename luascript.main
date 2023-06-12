@@ -1,0 +1,733 @@
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/vff1bQ9F"))()
+
+local Window = Library.CreateLib("whiz ware", "GrapeTheme")
+
+local Tab1 = Window:NewTab("Blatant")
+
+local Tab1Section = Tab1:NewSection("")
+
+Tab1Section:NewToggle("Better fly", "ToggleInfo", function(state)
+
+    if state then
+
+        game.Workspace.Gravity = 400
+
+    else
+
+        game.Workspace.Gravity = 140
+
+    end
+
+end)
+
+Tab1Section:NewButton("Fly (Use with better fly)", "ButtonInfo", function()
+
+    local InfiniteJumpEnabled = true
+
+game:GetService("UserInputService").JumpRequest:connect(function()
+
+	if InfiniteJumpEnabled then		game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+
+	end
+
+end)
+
+end)
+
+Tab1Section:NewToggle("KillAura", "?", function(state)
+
+    if state then
+
+        local player = game:GetService("Players")
+
+        local lplr = player.LocalPlayer
+
+        local cam = workspace.CurrentCamera
+
+        local KnitClient = debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 6)
+
+        local SwordCont = KnitClient.Controllers.SwordController
+
+        
+
+        local aura = false
+
+        local DistVal = {["Value"] = 25}
+
+        
+
+        local connection
+
+        
+
+        function Aura()
+
+            for i,v in pairs(game.Players:GetChildren()) do
+
+                if v.Character and v.Name ~= game.Players.LocalPlayer.Name and v.Character:FindFirstChild("HumanoidRootPart") then
+
+                    local mag = (v.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+
+                    if mag <= DistVal["Value"] and v.Team ~= game.Players.LocalPlayer.Team and v.Character:FindFirstChild("Humanoid") then
+
+                        if v.Character.Humanoid.Health > 0 then
+
+                            aura = true
+
+                            SwordCont:swingSwordAtMouse()
+
+                        end
+
+                    end
+
+                end
+
+            end
+
+        end
+
+        
+
+        connection = game:GetService("RunService").Stepped:connect(function()
+
+            Aura()
+
+        end)
+
+    else
+
+        if connection then
+
+            connection:Disconnect()
+
+        end
+
+    end
+
+end)
+
+Tab1Section:NewToggle("Speed", "ToggleInfo", function(state)
+
+    if state then
+
+        local player = game.player:WaitForChild("Player")
+
+local userInputService = game:GetService("UserInputService")
+
+local speed = player.Humanoid.WalkSpeed
+
+player.Humanoid.WalkSpeed = 23
+
+    else
+
+        local player = game.player:WaitForChild("Player")
+
+local userInputService = game:GetService("UserInputService")
+
+local speed = player.Humanoid.WalkSpeed
+
+player.Humanoid.WalkSpeed = 20
+
+    end
+
+end)
+
+Tab1Section:NewButton("Velocity", "ButtonInfo", function()
+
+    local s = require(game:GetService("ReplicatedStorage").TS.damage["knockback-util"]).KnockbackUtil
+
+s.applyKnockbackDirection = function(...)end
+
+s.applyKnockback = function(...)end
+
+end)
+
+Tab1Section:NewButton("Reach", "ButtonInfo", function()
+
+    loadstring(game:HttpGet("https://pastebin.com/raw/v85uKg67", true))()
+
+end)
+
+Tab1Section:NewButton("No fall", "ButtonInfo", function()
+
+    local OldNamecall
+
+OldNamecall = hookmetamethod(game, "__namecall", function(Self, ...)
+
+local method = getnamecallmethod()
+
+local shit = { ... }
+
+if method == "FireServer" and game:GetService"ReplicatedStorage".Remotes.Async and shit[2] == "FallDamageServer" then return wait(math.huge) end
+
+return OldNamecall(Self, ...)
+
+end)
+
+end)
+
+local Tab2 = Window:NewTab("Visuals")
+
+local Tab2Section = Tab2:NewSection("")
+
+Tab2Section:NewButton("120 Fov", "Shows button 1", function()
+
+    local Fov = 120
+
+    game.Workspace.Camera.FieldOfView = Fov
+
+end)
+
+Tab2Section:NewButton("Esp", "Shows button 2", function()
+
+    local FillColor = Color3.fromRGB(153,50,204)
+
+local DepthMode = "AlwaysOnTop"
+
+local FillTransparency = 0.5
+
+local OutlineColor = Color3.fromRGB(255,255,255)
+
+local OutlineTransparency = 0
+
+local CoreGui = game:FindService("CoreGui")
+
+local Players = game:FindService("Players")
+
+local lp = Players.LocalPlayer
+
+local connections = {}
+
+local Storage = Instance.new("Folder")
+
+Storage.Parent = CoreGui
+
+Storage.Name = "Highlight_Storage"
+
+local function Highlight(plr)
+
+    local Highlight = Instance.new("Highlight")
+
+    Highlight.Name = plr.Name
+
+    Highlight.FillColor = FillColor
+
+    Highlight.DepthMode = DepthMode
+
+    Highlight.FillTransparency = FillTransparency
+
+    Highlight.OutlineColor = OutlineColor
+
+    Highlight.OutlineTransparency = 0
+
+    Highlight.Parent = Storage
+
+    
+
+    local plrchar = plr.Character
+
+    if plrchar then
+
+        Highlight.Adornee = plrchar
+
+    end
+
+    connections[plr] = plr.CharacterAdded:Connect(function(char)
+
+        Highlight.Adornee = char
+
+    end)
+
+end
+
+Players.PlayerAdded:Connect(Highlight)
+
+for i,v in next, Players:GetPlayers() do
+
+    Highlight(v)
+
+end
+
+Players.PlayerRemoving:Connect(function(plr)
+
+    local plrname = plr.Name
+
+    if Storage[plrname] then
+
+        Storage[plrname]:Destroy()
+
+    end
+
+    if connections[plr] then
+
+        connections[plr]:Disconnect()
+
+    end
+
+end)
+
+end)
+
+local Tab3 = Window:NewTab("World")
+
+local Tab3Section = Tab3:NewSection("")
+
+Tab3Section:NewToggle("AntiVoid", "?", function(state)
+
+    if state then
+
+        local lplr = game.Players.LocalPlayer
+
+        void = Instance.new("Part", workspace)
+
+        void.Size = Vector3.new(9999, 0.1, 9999)
+
+        void.Position = Vector3.new(0, 20, 0)
+
+        void.Name = "void"
+
+        void.Transparency = 0.4
+
+        void.BrickColor = BrickColor.new(255, 0,0)
+
+        void.CanCollide = true
+
+        void.Anchored = true
+
+        void.Material = Enum.Material.Neon
+
+        void.Touched:Connect(function(part)
+
+            if part.Parent and part.Parent:FindFirstChildOfClass("Humanoid") then
+
+                lplr.Character.HumanoidRootPart.Colide = Vector3.new(255, 0, 0)
+
+            end
+
+        end)
+
+    else
+
+        if void then
+
+            void:Destroy()
+
+           end
+
+     end
+
+end)
+
+Tab3Section:NewButton("Fps boost", "ButtonInfo", function()
+
+    local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
+
+local g = game
+
+local w = g.Workspace
+
+local l = g.Lighting
+
+local t = w.Terrain
+
+t.WaterWaveSize = 0
+
+t.WaterWaveSpeed = 0
+
+t.WaterReflectance = 0
+
+t.WaterTransparency = 0
+
+l.GlobalShadows = false
+
+l.FogEnd = 9e9
+
+l.Brightness = 0
+
+settings().Rendering.QualityLevel = "QualityLevel1"
+
+for i,v in pairs(g:GetDescendants()) do
+
+    if v:IsA("Part") or v:IsA("Union") or v:IsA("MeshPart") then
+
+        v.Material = "Plastic"
+
+v.Reflectance = 0
+
+elseif v:IsA("Decal") and decalsyeeted then 
+
+v.Transparency = 1
+
+elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then 
+
+v.Lifetime = NumberRange.new(0)
+
+    end
+
+end
+
+end)
+
+local Tab4 = Window:NewTab("Player")
+
+local Tab4Section = Tab4:NewSection("")
+
+Tab4Section:NewButton("Animations", "Shows button 4", function()
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/GamingScripter/Animation-Hub/main/Animation%20Gui", true))()
+
+end)
+
+Tab4Section:NewButton("cape", "Shows button 3", function()
+
+    local player = game:GetService("Players")
+
+local lplr = player.LocalPlayer
+
+if lplr.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then
+
+      if lplr.Character:FindFirstChild("Torso") then
+
+        torso = lplr.Character.Torso
+
+      else
+
+        torso = lplr.Character.UpperTorso
+
+      end
+
+      local CapeP = Instance.new("Part", torso.Parent)
+
+      CapeP.Name = "Cape"
+
+      CapeP.Anchored = false
+
+      CapeP.CanCollide = false
+
+      CapeP.TopSurface = 0
+
+      CapeP.BottomSurface = 0
+
+      CapeP.Color = Color3.fromRGB(0,0,0)
+
+      CapeP.FormFactor = "Custom"
+
+      CapeP.Size = Vector3.new(0.2,0.2,0.2)
+
+      local decal = Instance.new("Decal", CapeP)
+
+      decal.Texture = "http://www.roblox.com/asset/?id=415885550"
+
+      decal.Face = "Back"
+
+      local msh = Instance.new("BlockMesh", CapeP)
+
+      msh.Scale = Vector3.new(9,17.5,0.5)
+
+      local motor = Instance.new("Motor", CapeP)
+
+      motor.Part0 = CapeP
+
+      motor.Part1 = torso
+
+      motor.MaxVelocity = 0.01
+
+      motor.C0 = CFrame.new(0,1.75,0) * CFrame.Angles(0,math.rad(90),0)
+
+      motor.C1 = CFrame.new(0,1,0.45) * CFrame.Angles(0,math.rad(90),0)
+
+      local wave = false
+
+      repeat wait(1/44)
+
+        decal.Transparency = torso.Transparency
+
+        local ang = 0.1
+
+        local oldmag = torso.Velocity.magnitude
+
+        local mv = 0.002
+
+        if wave then
+
+          ang = ang + ((torso.Velocity.magnitude/10) * 0.05) + 0.05
+
+          wave = false
+
+        else
+
+          wave = true
+
+        end
+
+        ang = ang + math.min(torso.Velocity.magnitude/11, 0.5)
+
+        motor.MaxVelocity = math.min((torso.Velocity.magnitude/111), 0.04) + mv
+
+        motor.DesiredAngle = -ang
+
+        if motor.CurrentAngle < -0.2 and motor.DesiredAngle > -0.2 then
+
+          motor.MaxVelocity = 0.04
+
+        end
+
+        repeat wait() until motor.CurrentAngle == motor.DesiredAngle or math.abs(torso.Velocity.magnitude - oldmag) >= (torso.Velocity.magnitude/10) +
+
+1
+
+        if torso.Velocity.magnitude < 0.1 then
+
+          wait(0.1)
+
+        end
+
+      until not CapeP or CapeP.Parent ~= torso.Parent
+
+    end
+
+end)
+
+Tab4Section:NewButton("Texture pack", "Shows button 2", function()
+
+   workspace.CurrentCamera.Viewmodel.ChildAdded:Connect(function(x)
+
+    if x and x:FindFirstChild("Handle") then
+
+        if string.find(x.Name:lower(), 'sword') then
+
+            x.Handle.Material = "ForceField"
+
+            x.Handle.MeshId = "rbxassetid://13471207377"
+
+            x.Handle.BrickColor = BrickColor.new("Bright red")
+
+        end
+
+    end
+
+end)
+
+end)
+
+Tab4Section:NewButton("vape v4", "ButtonInfo", function()
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
+
+end)
+
+Tab4Section:NewButton("Autowin", "ButtonInfo", function()
+
+    repeat wait() until game:IsLoaded()
+
+repeat wait() until game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.Y < 140 and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.Y > 1 or game.Workspace:FindFirstChild("spawn_cage")
+
+repeat wait() until not game.Workspace:FindFirstChild("BedShield")
+
+local players = game:GetService("Players").LocalPlayer
+
+local character = players.Character 
+
+local check
+
+local TweenService  = game:GetService("TweenService")
+
+local antifall      = false
+
+local Bed = false
+
+local function moveto(obj, speed)
+
+    local TweenService  = game:GetService("TweenService")
+
+    local info = TweenInfo.new(((game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position - obj.Position).Magnitude)/ speed,Enum.EasingStyle.Linear)
+
+    local tween = TweenService:Create(game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"), info, {CFrame = obj})
+
+ 
+
+    if not game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("BodyVelocity") then
+
+        antifall = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
+
+        antifall.Velocity = Vector3.new(0,0,0)
+
+		tween:Play()
+
+    end
+
+ 
+
+    tween.Completed:Connect(function()
+
+        antifall:Destroy()
+
+    end)
+
+end
+
+function getPlr()
+
+    nMagnitude = nil
+
+    r = nil
+
+    for i,v in next, game:service'Players':GetPlayers() do
+
+          if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.TeamColor ~= game:service'Players'.LocalPlayer.TeamColor and v.Character:FindFirstChild('Humanoid') and v.Character.Humanoid.Health > 0 and v ~= game:service'Players'.LocalPlayer then
+
+			  magnitude = (v.Character:FindFirstChild("HumanoidRootPart").Position - game:service'Players'.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position).Magnitude
+
+			  if nMagnitude ~= nil then
+
+                    if magnitude < nMagnitude then
+
+                       r = v
+
+                       nMagnitude = magnitude
+
+                    end
+
+                else
+
+                    nMagnitude = magnitude
+
+                    r = v
+
+             end
+
+          end
+
+       end
+
+       return r
+
+end
+
+if KRNL_LOADED then
+
+	players:Kick("patched")
+
+else
+
+    game:GetService("ReplicatedStorage")["rbxts_include"]["node_modules"]["@rbxts"].net.out["_NetManaged"].ResetCharacter:FireServer()
+
+end
+
+	
+
+players.CharacterAdded:Connect(function(character)
+
+for i, beds in next, workspace:GetChildren() do
+
+	if beds.Name == "bed" then
+
+		if beds.Covers.BrickColor ~= game.Players.LocalPlayer.Team.TeamColor and game.Workspace:FindFirstChild("bed") then
+
+			wait(0.45)
+
+            moveto(CFrame.new(beds.Position + Vector3.new(0,10,0)), 1100)			
+
+            repeat wait() until beds == nil or beds.parent == nil
+
+			game:GetService("ReplicatedStorage")["rbxts_include"]["node_modules"]["@rbxts"].net.out["_NetManaged"].ResetCharacter:FireServer()
+
+			check = bruh
+
+		end
+
+	end
+
+end
+
+repeat wait() until check == bruh			
+
+	if game.Players.LocalPlayer.Character ~= nil then
+
+		players.CharacterAdded:Connect(function(character)
+
+			wait(.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 900)
+
+			wait(0.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)
+
+			wait(0.4)
+
+            moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)		
+
+            wait(0.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)
+
+            wait(0.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)
+
+			wait(0.4)
+
+            moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)		
+
+            wait(0.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)			
+
+            wait(0.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)
+
+			wait(0.4)
+
+            moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)		
+
+            wait(0.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)			
+
+            wait(0.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)
+
+			wait(0.4)
+
+            moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)		
+
+            wait(0.4)
+
+			moveto(CFrame.new(getPlr().Character.Humanoid.RootPart.Position), 28)
+
+			wait(0.4)
+
+			game:GetService("ReplicatedStorage")["rbxts_include"]["node_modules"]["@rbxts"].net.out["_NetManaged"].ResetCharacter:FireServer()
+
+	    end)
+
+	end
+
+end)
+
+for _, beds in pairs(workspace:GetChildren()) do
+
+    if beds.Name == "bed" and beds.Covers.BrickColor == game.Players.LocalPlayer.Team.TeamColor then
+
+        Bed = true
+
+        break
+
+    end
+
+end
+
+while wait() do
+
+	if not Bed and character:FindFirstChild("HumanoidRootPart") then
+
+        character.HumanoidRootPart:Destroy()
+
+    end
+
+end
+
+end)
